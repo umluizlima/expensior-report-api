@@ -7,10 +7,10 @@ def create_app():
     app = Flask(__name__)
 
     client = MongoClient(
-        os.environ.get('MONGODB_URI')
+        os.environ.get('MONGODB_URI') \
         or 'mongodb://localhost:27017/'
     )
-    db = client.expensior_database
+    db = client.get_default_database()
     entries = db.entries_collection
 
     from flask_cors import CORS
