@@ -7,6 +7,8 @@ name = "pypi"
 tox = "*"
 flask = "*"
 pymongo = "*"
+flask-cors = "*"
+flask-sslify = "*"
 
 [dev-packages]
 
