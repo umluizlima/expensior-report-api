@@ -7,7 +7,7 @@ def create_app():
     app = Flask(__name__)
 
     client = MongoClient(
-        os.environ.get('DATABASE_URL')
+        os.environ.get('MONGODB_URI')
         or 'mongodb://localhost:27017/'
     )
     db = client.expensior_database
