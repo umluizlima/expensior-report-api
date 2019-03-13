@@ -13,6 +13,13 @@ def create_app():
     db = client.expensior_database
     entries = db.entries_collection
 
+    from flask_cors import CORS
+    CORS(app)
+
+    from flask_sslify import SSLify
+    if 'DYNO' in os.environ:  # only trigger SSLify if app is running on Heroku
+        sslify = SSLify(app)
+
     @app.route("/")
     def home():
         return "Welcome home."
