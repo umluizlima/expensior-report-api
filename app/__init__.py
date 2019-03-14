@@ -28,9 +28,12 @@ def create_app():
     @app.route("/api/entries", methods=['POST'])
     def create_entry():
         data = request.get_json() or {}
-        return (str(entries.insert_one(data).inserted_id), 201) \
-            if data \
-            else ('Bad Request', 400)
+        if data:
+            print(data)
+            return (str(piles.update_one(
+                {"name": data.pop('pile')},
+                {"$push": {"entries": data}}).upserted_id), 201)
+        return ("Bad Request", 400)
 
 
     @app.route("/api/piles", methods=['POST'])
