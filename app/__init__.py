@@ -8,10 +8,10 @@ def create_app():
 
     client = MongoClient(
         os.environ.get('MONGODB_URI') \
-        or 'mongodb://localhost:27017/'
+        or 'mongodb://localhost:27017/expensior'
     )
-    db = client.get_default_database()
-    entries = db.entries_collection
+    db = client.get_database()
+    piles = db.piles_collection
 
     from flask_cors import CORS
     CORS(app)
@@ -31,5 +31,23 @@ def create_app():
         return (str(entries.insert_one(data).inserted_id), 201) \
             if data \
             else ('Bad Request', 400)
+
+
+    @app.route("/api/piles", methods=['POST'])
+    def create_pile():
+        data = request.get_json() or {}
+        response = ('Bad Request', 400)
+        if data:
+            data['entries'] = []
+            response = (str(piles.insert_one(data).inserted_id), 201)
+        return response
+
+
+    @app.route("/api/piles", methods=['GET'])
+    def get_piles():
+        return jsonify(
+            [{'name': pile['name'], 'entries': pile['entries']} \
+            for pile \
+            in piles.find()])
 
     return app
